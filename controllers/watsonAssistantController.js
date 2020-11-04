@@ -1,0 +1,1 @@
+const watson = require("ibm-watson");
