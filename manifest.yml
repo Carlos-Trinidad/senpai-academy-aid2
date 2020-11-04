@@ -10,7 +10,7 @@ applications:
     env:
       - API_KEY: 'placeholder'
   - name: senpai-academy-semestre2-carlostrinidad-prod
-    memory: 256M
+    memory: 128M
     instances: 1
     env:
       - API_KEY: 'placeholder'
