@@ -1,0 +1,16 @@
+applications: 
+  - name: senpai-academy-semestre2-carlostrinidad-dev
+    memory: 64M
+    instances: 1
+    env:
+      - API_KEY: 'placeholder'
+  - name: senpai-academy-semestre2-carlostrinidad-test
+    memory: 64M
+    instances: 1
+    env:
+      - API_KEY: 'placeholder'
+  - name: senpai-academy-semestre2-carlostrinidad-prod
+    memory: 256M
+    instances: 1
+    env:
+      - API_KEY: 'placeholder'
