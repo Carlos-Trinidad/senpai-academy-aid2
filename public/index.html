@@ -1,11 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    Mi Html
-</body>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Proyecto IA Senpai 2020</title>
+    <link
+      href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"
+      rel="stylesheet"
+      id="bootstrap-css"
+    />
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="index.js"></script>
+    <link rel="stylesheet" href="index.css">
+  </head>
+  <body>
+
+    <div class="chat_window">
+      <div class="top_menu">
+        <div class="buttons">
+          <div class="button close"></div>
+          <div class="button minimize"></div>
+          <div class="button maximize"></div>
+        </div>
+        <div class="title">Chat</div>
+      </div>
+      <ul class="messages"></ul>
+      <div class="bottom_wrapper clearfix">
+        <div class="message_input_wrapper">
+          <input
+            class="message_input"
+            placeholder="Escribe tu mensaje"
+          />
+        </div>
+        <div class="send_message">
+          <div class="icon"></div>
+          <div class="text">Enviar</div>
+        </div>
+      </div>
+    </div>
+    <div class="message_template">
+      <li class="message">
+        <div class="avatar"></div>
+        <div class="text_wrapper"><div class="text"></div></div>
+      </li>
+    </div>
+
+     <!-- <script>
+        window.watsonAssistantChatOptions = {
+            integrationID: "464bdb0e-0cbc-40e4-b717-5fa92d596e4c", // The ID of this integration.
+            region: "us-south", // The region your integration is hosted in.
+            serviceInstanceID: "32df5ff3-1ece-4350-9449-090b07effa64", // The ID of your service instance.
+            onLoad: function(instance) { instance.render(); }
+          };
+        setTimeout(function(){
+          const t=document.createElement('script');
+          t.src="https://web-chat.global.assistant.watson.appdomain.cloud/loadWatsonAssistantChat.js";
+          document.head.appendChild(t);
+        });
+      </script> -->
+  </body>
 </html>
