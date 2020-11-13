@@ -37,7 +37,7 @@
 
     sendMessageAssistant = async function (texto) {
 
-      let responseWatsonText;
+      let responseWatsonText = [];
 
       let payload = { text: texto, sessionId: sessionId };
 
@@ -62,16 +62,16 @@
 
         await response.result.forEach(generic => {
           if (generic.response_type === 'text') {
-            responseWatsonText = generic.text;
+            responseWatsonText.push(generic.text);
           }
           else if (generic.response_type === 'option') {
-            responseWatsonText = JSON.stringify(generic);
+            responseWatsonText.push(JSON.stringify(generic));
           }
           else if (generic.response_type === 'image') {
-            responseWatsonText = `<img src="${generic.source}" width="250" height="150">`;
+            responseWatsonText.push(`<img src="${generic.source}" width="250" height="150">`);
           }
           else {
-            responseWatsonText = JSON.stringify(generic);
+            responseWatsonText.push(JSON.stringify(generic));
           }
         });
 
@@ -124,7 +124,10 @@
 
         console.log(messageAssistant);
 
-        drawMessage(messageAssistant, 'bot');
+        for (let i = 0; i < messageAssistant.length; i++) {
+          let text = messageAssistant[i];
+          drawMessage(text, 'bot');
+        }
       }
 
       return $messages.animate(
