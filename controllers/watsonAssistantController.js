@@ -13,7 +13,7 @@ let sendMessage = async (req, res) => {
     try {
         let assistantId = process.env.WATSON_ASSISTANT_ASSISTANT_ID;
         let sessionId = req.body.sessionId ? req.body.sessionId : await createSession(assistantId);
-        let text = req.query.text;
+        let text = req.body.text;
 
         /*
         POST:
@@ -43,7 +43,8 @@ let sendMessage = async (req, res) => {
         res.status(200).send({
             success: true,
             sessionId: sessionId,
-            result: response.result.output.generic
+            result: response.result.output.generic,
+            intenciones: response.result.output.intents
         });
     } catch (error) {
         console.log(error);
