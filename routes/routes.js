@@ -13,6 +13,6 @@ router.get('/ping', pingController.getPing);
 router.post('/watson/message', watsonAssistantController.sendMessage);
 router.get('/watson/message', watsonAssistantController.sendMessage);
 
-router.get("/watson/visual/classify", watsonVisualRecognitionController.classifyImage);
+router.post("/watson/visual/classify", watsonVisualRecognitionController.classifyImage);
 
 module.exports = router;

@@ -24,7 +24,6 @@
     let message_side;
     let drawMessage;
     let sendMessageAssistant;
-    let sendClassifyImage;
     let sessionId;
 
     message_side = "right";
@@ -35,6 +34,28 @@
       $message_input = $(".message_input");
       return $message_input.val();
     };
+
+    sendClassifyImage = async function (){
+      let formData = new FormData();
+      let fileField = document.querySelector("#inputImage");
+      formData.append("imagen", fileField.files[0]);
+
+      try {
+        let response = await fetch("/api/v1/watson/visual/classify", {
+          method: "POST",
+          body: formData,
+        });
+  
+        response = await response.json();
+  
+        console.log('Success', response);
+
+        drawMessage(response.texto, 'bot');
+
+      } catch (error) {
+        console.log(error);
+      }
+    }
 
     sendMessageAssistant = async function (texto) {
 
@@ -81,28 +102,6 @@
         }
 
         return responseWatsonText;
-
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
-    sendClassifyImage = async function (){
-      let formData = new FormData();
-      let fileField = document.querySelector("#inputImage");
-      formData.append("imagen", fileField.files[0]);
-
-      try {
-        let response = await fetch("/api/v1/classify", {
-          method: "POST",
-          body: formData,
-        });
-  
-        response = await response.json();
-  
-        console.log('Success', response);
-
-        drawMessage(response.texto, 'bot');
 
       } catch (error) {
         console.log(error);

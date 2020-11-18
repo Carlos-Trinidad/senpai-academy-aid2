@@ -33,7 +33,7 @@ let classifyImage = async (req, res) => {
          });
 
          axios.post(process.env.CLOUD_FUNCTION_URL, {
-            action: 'precio_habitacion',
+            action: 'Precio_Habitacion',
             hotel: hotel.class
           })
           .then(function (response) {
