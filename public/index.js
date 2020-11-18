@@ -24,6 +24,7 @@
     let message_side;
     let drawMessage;
     let sendMessageAssistant;
+    let sendClassifyImage;
     let sessionId;
 
     message_side = "right";
@@ -75,7 +76,33 @@
           }
         });
 
+        if(response.intenciones && response.intenciones[0] && response.intenciones[0].intent === 'precio_habitacion'){
+          responseWatsonText.push('<input type="file" name="imagen" id="inputImage"><button id="enviarImage" onclick="sendClassifyImage()">Enviar</button>');
+        }
+
         return responseWatsonText;
+
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    sendClassifyImage = async function (){
+      let formData = new FormData();
+      let fileField = document.querySelector("#inputImage");
+      formData.append("imagen", fileField.files[0]);
+
+      try {
+        let response = await fetch("/api/v1/classify", {
+          method: "POST",
+          body: formData,
+        });
+  
+        response = await response.json();
+  
+        console.log('Success', response);
+
+        drawMessage(response.texto, 'bot');
 
       } catch (error) {
         console.log(error);

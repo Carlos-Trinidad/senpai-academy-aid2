@@ -1,6 +1,7 @@
 const fs = require('fs');
 const VisualRecognitionV3 = require('ibm-watson/visual-recognition/v3');
 const { IamAuthenticator } = require('ibm-watson/auth');
+const axios = require("axios");
 
 const visualRecognition = new VisualRecognitionV3({
     version: process.env.WATSON_VISUAL_RECOGNITION_VERSION,
@@ -11,9 +12,11 @@ const visualRecognition = new VisualRecognitionV3({
 });
 
 let classifyImage = async (req, res) => {
-    const classifyParams = {
 
-        imagesFile: fs.createReadStream('./public/mrgato.jpg'),
+    console.log(req.files);
+
+    const classifyParams = {
+        imagesFile: fs.createReadStream(req.files.imagen.path),
         classifierIds: [process.env.WATSON_VISUAL_RECOGNITION_CLASSIFIER_ID_HOTELES],
     };
 
@@ -22,7 +25,24 @@ let classifyImage = async (req, res) => {
         let response = await visualRecognition.classify(classifyParams);
 
         let classifiedImages = response.result;
+
         console.log(JSON.stringify(classifiedImages, null, 2));
+
+        let hotel = classifiedImages.images[0].classifiers[0].classes.reduce(function (prev, current) {
+            return (prev.score > current.score) ? prev : current
+         });
+
+         axios.post(process.env.CLOUD_FUNCTION_URL, {
+            action: 'precio_habitacion',
+            hotel: hotel.class
+          })
+          .then(function (response) {
+            console.log(response.data);
+            res.send(response.data)
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
         
     } catch (error) {
         console.log(error);
