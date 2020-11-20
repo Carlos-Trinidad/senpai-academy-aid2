@@ -52,6 +52,9 @@ let sendMessage = async (req, res) => {
     }
 }
 
+let sendMessageAnalysis = async (req, res) => {
+}
+
 let createSession = async (assistantId) => {
     let response = await assistant.createSession({ assistantId: assistantId });
     console.log(`Nueva Session_ID creada: ${response.result.session_id}`);
