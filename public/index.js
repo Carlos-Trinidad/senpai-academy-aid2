@@ -25,6 +25,9 @@
     let drawMessage;
     let sendMessageAssistant;
     let sessionId;
+    let context;
+
+    let sendToneAnalyze = false;
 
     message_side = "right";
 
@@ -35,7 +38,7 @@
       return $message_input.val();
     };
 
-    sendClassifyImage = async function (){
+    sendClassifyImage = async function () {
       let formData = new FormData();
       let fileField = document.querySelector("#inputImage");
       formData.append("imagen", fileField.files[0]);
@@ -45,9 +48,9 @@
           method: "POST",
           body: formData,
         });
-  
+
         response = await response.json();
-  
+
         console.log('Success', response);
 
         drawMessage(response.texto, 'bot');
@@ -81,6 +84,7 @@
         console.log('Success: ', response);
 
         sessionId = response.sessionId;
+        context = response.context;
 
         await response.result.forEach(generic => {
           if (generic.response_type === 'text') {
@@ -97,13 +101,64 @@
           }
         });
 
-        if(response.intenciones && response.intenciones[0] && response.intenciones[0].intent === 'precio_habitacion'){
+        if (response.intenciones && response.intenciones[0] && response.intenciones[0].intent === 'precio_habitacion') {
           responseWatsonText.push('<input type="file" name="imagen" id="inputImage"><button id="enviarImage" onclick="sendClassifyImage()">Enviar</button>');
+        }
+
+        if (response.context.skills['main skill'].user_defined) {
+          if (context.skills["main skill"].user_defined.analizar_emocion) {
+            sendToneAnalyze = true;
+          }
         }
 
         return responseWatsonText;
 
       } catch (error) {
+        console.log(error);
+      }
+    }
+
+    sendMessageToneAnalyzer = async function (text) {
+      $(".message_input").val("");
+      let $messages = $(".messages");
+      let message = new Message({
+        text: text,
+        message_side: "right",
+      });
+      message.draw();
+      $messages.animate({ scrollTop: $messages.prop("scrollHeight") }, 300);
+
+
+      let payload = { text: text, sessionId: sessionId, context: context };
+
+      try {
+
+        let message = new Message({
+          text: "Escribiendo...",
+          message_side: "left",
+        });
+        message.draw();
+
+        let response = await fetch("/api/v1/watson/message/tone", {
+          method: 'POST',
+          body: JSON.stringify(payload),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
+        response = await response.json();
+
+        console.log('Success: ', response);
+
+        sendToneAnalyze = false;
+
+        // Eliminamos el ultimo mensaje dibujado (El mensaje de "Escribiendo...")
+        $(".messages li").last().remove();
+
+        drawMessage(response.result[0].text, 'bot')
+
+      } catch (error) { 
         console.log(error);
       }
     }
@@ -164,11 +219,21 @@
 
     /* Funcionalidad click de botones */
     $(".send_message").click(function (e) {
-      return drawMessage(getMessageText(), "user");
+      if (sendToneAnalyze) {
+        sendMessageToneAnalyzer(getMessageText());
+      }
+      else {
+        return drawMessage(getMessageText(), "user");
+      }
     });
     $(".message_input").keyup(function (e) {
       if (e.which === 13) {
-        return drawMessage(getMessageText(), "user");
+        if (sendToneAnalyze) {
+          sendMessageToneAnalyzer(getMessageText());
+        }
+        else {
+          return drawMessage(getMessageText(), "user");
+        }
       }
     });
     drawMessage('Mamperro', 'user');
