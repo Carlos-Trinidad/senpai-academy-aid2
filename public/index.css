@@ -198,3 +198,20 @@
     display: none;
   }
   
+
+  .bottom_wrapper .send_audio {
+    width: 50px;
+    height: 50px;
+    display: inline-block;
+    border-radius: 50px;
+    background-color: #a3d063;
+    border: 2px solid #a3d063;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.2s linear;
+    text-align: center;
+  }
+  .bottom_wrapper .send_audio:hover {
+    color: #a3d063;
+    background-color: #fff;
+  }

@@ -8,6 +8,7 @@ const watsonNluController = require("./../controllers/watsonNluController");
 const cloudantController = require("./../controllers/cloudantController")
 const watsonTranslatorController = require("./../controllers/watsonTranslatorController");
 const watsonToneAnalyzerController = require("./../controllers/watsonToneAnalyzer");
+const watsonSTTController = require("../controllers/watsonSTTController");
 
 /*
  Rutas de Ping
@@ -28,5 +29,7 @@ router.post("/cloudant/insert/nlu", cloudantController.insertNlu);
 router.post("/watson/translate", watsonTranslatorController.translate);
 
 router.post("/watson/tone/analyze", watsonToneAnalyzerController.analyzeTone);
+
+router.post("/watson/stt", watsonSTTController.STT);
 
 module.exports = router;
