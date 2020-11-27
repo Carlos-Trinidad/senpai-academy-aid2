@@ -19,6 +19,7 @@ let STT = async (req, res) => {
         wordAlternativesThreshold: 0.9,
         keywords: ['colorado', 'tornado', 'manzana'],
         keywordsThreshold: 0.5,
+        model: 'es-AR_NarrowbandModel'
     };
 
     try {

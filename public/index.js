@@ -239,6 +239,73 @@
     drawMessage('Mamperro', 'user');
 
     //Funcionalidad de Audio
+    let recording = false;
 
+    startRecording = async function(){
+      let audioIN = {audio: true};
+      navigator.mediaDevices
+        .getUserMedia(audioIN)
+        .then(async function(mediaStreamObj) {
+          let mediaRecorder = new MediaRecorder(mediaStreamObj);
+          mediaRecorder.start();
+
+          let stop = document.getElementById('send_audio');
+
+          stop.addEventListener('click', function(ev) {
+            if(recording && mediaRecorder.state !== 'inactive'){
+              mediaRecorder.stop();
+            }
+          })
+
+          let dataArray = [];
+
+          mediaRecorder.ondataavailable = function (ev) {
+            dataArray.push(ev.data);
+          };
+          
+          mediaRecorder.onstop = async function(){
+
+            let audioData = new Blob(dataArray, { type: 'audio/mp3' });
+
+            dataArray = [];
+
+            let audioSrc = window.URL.createObjectURL(audioData);
+
+            console.log(audioSrc);
+
+            recording = false;
+
+            let formData = new FormData();
+            formData.append("audio", audioData);
+      
+            try {
+              let response = await fetch("/api/v1/watson/stt", {
+                method: "POST",
+                body: formData,
+              });
+      
+              response = await response.json();
+      
+              console.log('Success', response);
+
+              drawMessage(response.results[0].alternatives[0].transcript, "user");
+      
+            } catch (error) {
+              console.log(error);
+            }
+            
+          }
+        })
+        .catch(function(error){
+          console.log(error);
+        });
+    }
+
+    $(".send_audio").click(function (e) {
+      if(!recording){
+        recording = true;
+        startRecording();
+      }
+    });
   });
 }.call(this));
